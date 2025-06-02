@@ -48,6 +48,15 @@ tab2_counts <- merge(tab2_counts, tab2_df, by = c("venue", "paper DOI"))
 ```
 
 ```{r}
+tab3_df %>%
+  ggplot(aes(x=`Link to Data`, fill = `Link to Data`)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+```
+
+```{r}
 p1 <- tab3_df %>%
   ggplot(aes(x=`OG Labels`, fill = `OG Labels`)) +
   geom_bar() +
@@ -101,12 +110,5 @@ p2 <- tab3_df %>%
 plot_grid(p1, p2, ncol = 1)
 ```
 
-```{r}
-tab3_df %>%
-  ggplot(aes(x=`Link to Data`, fill = `Link to Data`)) +
-  geom_bar() +
-  theme_minimal() +
-  scale_fill_viridis_d() +
-  theme(legend.position = "none")
-```
+
 
