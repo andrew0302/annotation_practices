@@ -1,0 +1,112 @@
+---
+title: "Analysis"
+---
+
+
+```{r}
+library(here)
+library(tidyverse)
+library(viridis)
+library(cowplot)
+
+data_path <- here("data")
+```
+
+```{r}
+tab1_df <- read_csv(here(data_path, "Research Project Papers - Tab 1.csv"))
+tab2_df <- read_csv(here(data_path, "Research Project Papers - Tab 2.csv"))
+tab3_df <- read_csv(here(data_path, "Research Project Papers - Tab 3.csv"))
+```
+
+## Tab 1: Do papers have enduring impact?
+
+```{r}
+tab1_df %>% 
+  filter(Period == "15") %>%
+  ggplot(aes(x=Year, y = `Cited by`, color = `Source title`)) +
+  geom_point(alpha = .5, position = "jitter", size = 3) +
+  facet_grid(~ `Source title`) +
+  theme_minimal() + 
+  scale_color_viridis_d() +
+  theme(legend.position = "none")
+```
+
+## Tab 2: 
+
+```{r}
+tab2_counts <- tab2_df %>% group_by(venue, `paper DOI`) %>% count() 
+
+tab2_counts %>%
+  ggplot(aes(x=n, fill = venue)) +
+  facet_grid(~venue)+
+  geom_histogram(bins = 15) +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+tab2_counts <- merge(tab2_counts, tab2_df, by = c("venue", "paper DOI"))
+```
+
+```{r}
+p1 <- tab3_df %>%
+  ggplot(aes(x=`OG Labels`, fill = `OG Labels`)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+
+p2 <- tab3_df %>%
+  ggplot(aes(x=`Human Labels`, fill = `Human Labels`)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+
+plot_grid(p1, p2, ncol = 1)
+```
+
+```{r}
+p1 <- tab3_df %>%
+  ggplot(aes(x=`Overlap`, fill = Overlap)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+
+p2 <- tab3_df %>%
+  ggplot(aes(x=`IRR`, fill = IRR)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+
+plot_grid(p1, p2, ncol = 1)
+```
+
+```{r}
+p1 <- tab3_df %>%
+  ggplot(aes(x=`Training`, fill = Training)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+
+p2 <- tab3_df %>%
+  ggplot(aes(x=`Formal Instructions`, fill = `Formal Instructions`)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+
+plot_grid(p1, p2, ncol = 1)
+```
+
+```{r}
+tab3_df %>%
+  ggplot(aes(x=`Link to Data`, fill = `Link to Data`)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none")
+```
+
